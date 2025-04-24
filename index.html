@@ -27,10 +27,21 @@
   </div>
 
   <div id="page-form" class="hidden" style="font-family: 'UhBee Seulvely', 'Arial', sans-serif;">
-    <h2>인적사항 입력</h2>
-    <div class="form-group">
-      <input type="text" id="name" placeholder="이름" />
-    </div>
+  <h2>인적사항 입력</h2>
+  <div class="form-group">
+    <input type="text" id="name" placeholder="이름" />
+  </div>
+  <div class="form-group">
+    <input type="number" id="grade" placeholder="학년" />
+  </div>
+  <div class="form-group">
+    <input type="number" id="classNum" placeholder="반" />
+  </div>
+  <div class="form-group">
+    <input type="number" id="number" placeholder="번호" />
+  </div>
+  <button onclick="startTour()">투어 시작</button>
+</div>
     <div class="form-group">
       <input type="number" id="grade" placeholder="학년" />
     </div>
@@ -88,14 +99,14 @@
         const div = document.createElement("div");
         div.className = "stamp" + (collected.includes(i) ? " filled" : "");
         const animalIcons = [
-          ["https://cdn-icons-png.flaticon.com/128/616/616408.png", "https://cdn-icons-png.flaticon.com/128/616/616408.png"],
-          ["https://cdn-icons-png.flaticon.com/128/616/616426.png", "https://cdn-icons-png.flaticon.com/128/616/616426.png"],
-          ["https://cdn-icons-png.flaticon.com/128/616/616408.png", "https://cdn-icons-png.flaticon.com/128/616/616408.png"],
-          ["https://cdn-icons-png.flaticon.com/128/616/616423.png", "https://cdn-icons-png.flaticon.com/128/616/616423.png"],
-          ["https://cdn-icons-png.flaticon.com/128/616/616440.png", "https://cdn-icons-png.flaticon.com/128/616/616440.png"],
-          ["https://cdn-icons-png.flaticon.com/128/616/616427.png", "https://cdn-icons-png.flaticon.com/128/616/616427.png"]
-        ];
-        const iconURL = collected.includes(i) ? animalIcons[i][0] : animalIcons[i][1];
+  ['https://cdn-icons-png.flaticon.com/128/616/616408.png', 'https://cdn-icons-png.flaticon.com/128/616/616408.png'], // 고양이
+  ['https://cdn-icons-png.flaticon.com/128/616/616426.png', 'https://cdn-icons-png.flaticon.com/128/616/616426.png'], // 강아지
+  ['https://cdn-icons-png.flaticon.com/128/616/616408.png', 'https://cdn-icons-png.flaticon.com/128/616/616408.png'], // 토끼
+  ['https://cdn-icons-png.flaticon.com/128/616/616423.png', 'https://cdn-icons-png.flaticon.com/128/616/616423.png'], // 곰돌이
+  ['https://cdn-icons-png.flaticon.com/128/616/616440.png', 'https://cdn-icons-png.flaticon.com/128/616/616440.png'], // 여우
+  ['https://cdn-icons-png.flaticon.com/128/616/616427.png', 'https://cdn-icons-png.flaticon.com/128/616/616427.png'], // 사자
+];
+const iconURL = collected.includes(i) ? animalIcons[i][0] : animalIcons[i][1];
         div.innerHTML = `<img src="${iconURL}" alt="도장 아이콘" style="width:40px; height:40px;"><br>` + (collected.includes(i) ? `✅ ${i + 1}번` : `${i + 1}번 관광지`);
         book.appendChild(div);
       }
