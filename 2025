@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR 스탬프 투어</title>
+  <style>
+    body { font-family: 'Arial', sans-serif; text-align: center; background: #fff8f2; margin: 0; padding: 20px; }
+    h1 { color: #ff7b54; }
+    .hidden { display: none; }
+    .form-group { margin-bottom: 10px; }
+    .stamp-book { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 400px; margin: 20px auto; }
+    .stamp { border: 2px dashed #ccc; border-radius: 10px; height: 100px; line-height: 100px; font-size: 18px; background-color: #fff; }
+    .stamp.filled { background-color: #ffebd9; border-color: #ffa07a; color: #ff7b54; font-weight: bold; }
+    button { background: #ff7b54; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 15px; }
+    button:hover { background: #ff5733; }
+  </style>
+</head>
+<body>
+  <div id="page-start">
+    <h1>QR 스탬프 투어</h1>
+    <p>6개의 관광지를 방문하고 도장을 모아보세요!</p>
+    <button onclick="showForm()">시작하기</button>
+  </div>
+
+  <div id="page-form" class="hidden">
+    <h2>인적사항 입력</h2>
+    <div class="form-group">
+      <input type="text" id="name" placeholder="이름" />
+    </div>
+    <div class="form-group">
+      <input type="number" id="grade" placeholder="학년" />
+    </div>
+    <div class="form-group">
+      <input type="number" id="classNum" placeholder="반" />
+    </div>
+    <div class="form-group">
+      <input type="number" id="number" placeholder="번호" />
+    </div>
+    <button onclick="startTour()">투어 시작</button>
+  </div>
+
+  <div id="page-stamps" class="hidden">
+    <h2>도장북</h2>
+    <div class="stamp-book" id="stampBook"></div>
+    <p id="progress"></p>
+    <input type="text" id="qrInput" placeholder="QR 코드 입력" />
+    <button onclick="submitQR()">도장 찍기</button>
+  </div>
+
+  <div id="page-complete" class="hidden">
+    <h2>🎉 축하합니다!</h2>
+    <p>6개의 도장을 모두 모았습니다!</p>
+    <img src="https://i.imgur.com/oYiTqum.png" alt="리워드 이미지" width="200" />
+  </div>
+
+  <script>
+    const totalStamps = 6;
+    const validCodes = ["spot1", "spot2", "spot3", "spot4", "spot5", "spot6"];
+    let collected = JSON.parse(localStorage.getItem("stamps") || "[]");
+
+    function showForm() {
+      document.getElementById("page-start").classList.add("hidden");
+      document.getElementById("page-form").classList.remove("hidden");
+    }
+
+    function startTour() {
+      const name = document.getElementById("name").value;
+      const grade = document.getElementById("grade").value;
+      const classNum = document.getElementById("classNum").value;
+      const number = document.getElementById("number").value;
+      if (!name || !grade || !classNum || !number) {
+        alert("모든 항목을 입력해주세요.");
+        return;
+      }
+      localStorage.setItem("userInfo", JSON.stringify({ name, grade, classNum, number }));
+      document.getElementById("page-form").classList.add("hidden");
+      showStamps();
+    }
+
+    function showStamps() {
+      const book = document.getElementById("stampBook");
+      book.innerHTML = "";
+      for (let i = 0; i < totalStamps; i++) {
+        const div = document.createElement("div");
+        div.className = "stamp" + (collected.includes(i) ? " filled" : "");
+        div.innerText = collected.includes(i) ? `✅ ${i + 1}번` : `${i + 1}번 관광지`;
+        book.appendChild(div);
+      }
+      document.getElementById("progress").innerText = `${collected.length}/${totalStamps} 도장 완료!`;
+      document.getElementById("page-stamps").classList.remove("hidden");
+      if (collected.length === totalStamps) {
+        document.getElementById("page-stamps").classList.add("hidden");
+        document.getElementById("page-complete").classList.remove("hidden");
+      }
+    }
+
+    function submitQR() {
+      const code = document.getElementById("qrInput").value.trim();
+      const index = validCodes.indexOf(code);
+      if (index !== -1 && !collected.includes(index)) {
+        collected.push(index);
+        localStorage.setItem("stamps", JSON.stringify(collected));
+        showStamps();
+        document.getElementById("qrInput").value = "";
+      } else {
+        alert("유효하지 않거나 이미 등록된 코드입니다.");  
+      }
+    }
+
+    window.onload = () => {
+      if (localStorage.getItem("userInfo")) {
+        showStamps();
+      }
+    };
+  </script>
+</body>
+</html>
