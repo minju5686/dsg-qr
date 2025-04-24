@@ -2,28 +2,31 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
+  <link href="https://fonts.googleapis.com/css2?family=UhBee+Seulvely&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QR 스탬프 투어</title>
+  <title>광주동성여자중학교 QR 스탬프 투어</title>
   <style>
-    body { font-family: 'Arial', sans-serif; text-align: center; background: #fff8f2; margin: 0; padding: 20px; }
+    body { font-family: 'UhBee Seulvely', 'Arial', sans-serif; text-align: center; background: #fff8f2; margin: 0; padding: 20px; }
     h1 { color: #ff7b54; }
     .hidden { display: none; }
     .form-group { margin-bottom: 10px; }
-    .stamp-book { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 400px; margin: 20px auto; }
-    .stamp { border: 2px dashed #ccc; border-radius: 10px; height: 100px; line-height: 100px; font-size: 18px; background-color: #fff; }
-    .stamp.filled { background-color: #ffebd9; border-color: #ffa07a; color: #ff7b54; font-weight: bold; }
+    .stamp-book { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 420px; margin: 20px auto; padding: 10px; background: #e0f7e9; border-radius: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .stamp { border: 3px dotted #a2d5ac; border-radius: 12px; height: 100px; line-height: 100px; font-size: 17px; background-color: #fdfdfd; transition: all 0.3s ease; box-shadow: inset 0 0 5px rgba(0,0,0,0.05); }
+    .stamp.filled { background-color: #b2f2bb; border-color: #70c47c; color: #2f8f4e; font-weight: bold; transform: scale(1.05); }
     button { background: #ff7b54; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 15px; }
     button:hover { background: #ff5733; }
+    .logo { max-width: 120px; margin-bottom: 10px; }
   </style>
 </head>
 <body>
   <div id="page-start">
-    <h1>QR 스탬프 투어</h1>
+    <img src="/mnt/data/학교로고.png" alt="학교 로고" class="logo" />
+    <h1><span style="color: green;">QR 스탬프 투어</span></h1>
     <p>6개의 관광지를 방문하고 도장을 모아보세요!</p>
     <button onclick="showForm()">시작하기</button>
   </div>
 
-  <div id="page-form" class="hidden">
+  <div id="page-form" class="hidden" style="font-family: 'UhBee Seulvely', 'Arial', sans-serif;">
     <h2>인적사항 입력</h2>
     <div class="form-group">
       <input type="text" id="name" placeholder="이름" />
@@ -84,7 +87,16 @@
       for (let i = 0; i < totalStamps; i++) {
         const div = document.createElement("div");
         div.className = "stamp" + (collected.includes(i) ? " filled" : "");
-        div.innerText = collected.includes(i) ? `✅ ${i + 1}번` : `${i + 1}번 관광지`;
+        const animalIcons = [
+          ["https://cdn-icons-png.flaticon.com/128/616/616408.png", "https://cdn-icons-png.flaticon.com/128/616/616408.png"],
+          ["https://cdn-icons-png.flaticon.com/128/616/616426.png", "https://cdn-icons-png.flaticon.com/128/616/616426.png"],
+          ["https://cdn-icons-png.flaticon.com/128/616/616408.png", "https://cdn-icons-png.flaticon.com/128/616/616408.png"],
+          ["https://cdn-icons-png.flaticon.com/128/616/616423.png", "https://cdn-icons-png.flaticon.com/128/616/616423.png"],
+          ["https://cdn-icons-png.flaticon.com/128/616/616440.png", "https://cdn-icons-png.flaticon.com/128/616/616440.png"],
+          ["https://cdn-icons-png.flaticon.com/128/616/616427.png", "https://cdn-icons-png.flaticon.com/128/616/616427.png"]
+        ];
+        const iconURL = collected.includes(i) ? animalIcons[i][0] : animalIcons[i][1];
+        div.innerHTML = `<img src="${iconURL}" alt="도장 아이콘" style="width:40px; height:40px;"><br>` + (collected.includes(i) ? `✅ ${i + 1}번` : `${i + 1}번 관광지`);
         book.appendChild(div);
       }
       document.getElementById("progress").innerText = `${collected.length}/${totalStamps} 도장 완료!`;
@@ -95,22 +107,28 @@
       }
     }
 
-    function submitQR() {
-      const code = document.getElementById("qrInput").value.trim();
-      const index = validCodes.indexOf(code);
+    function submitQR(code = null) {
+      const inputCode = code || document.getElementById("qrInput").value.trim();
+      const index = validCodes.indexOf(inputCode);
       if (index !== -1 && !collected.includes(index)) {
         collected.push(index);
         localStorage.setItem("stamps", JSON.stringify(collected));
         showStamps();
         document.getElementById("qrInput").value = "";
-      } else {
+      } else if (!code) {
         alert("유효하지 않거나 이미 등록된 코드입니다.");
       }
     }
 
     window.onload = () => {
+      const params = new URLSearchParams(window.location.search);
+      const qrCodeParam = params.get("code");
+
       if (localStorage.getItem("userInfo")) {
         showStamps();
+        if (qrCodeParam) {
+          submitQR(qrCodeParam);
+        }
       }
     };
   </script>
