@@ -21,7 +21,7 @@
 <body>
   <div id="page-start">
     <img src="/mnt/data/학교로고.png" alt="학교 로고" class="logo" />
-    <h1><span style="color: green;">QR 스탬프 투어</span></h1>
+    <h1><span style="color: green;">광주동성여자중학교 QR 스탬프 투어</span></h1>
     <p>6개의 관광지를 방문하고 도장을 모아보세요!</p>
     <button onclick="showForm()">시작하기</button>
   </div>
@@ -74,9 +74,13 @@
     let collected = JSON.parse(localStorage.getItem("stamps") || "[]");
 
     function showForm() {
-      document.getElementById("page-start").classList.add("hidden");
-      document.getElementById("page-form").classList.remove("hidden");
-    }
+  document.getElementById("page-start").classList.add("hidden");
+  if (localStorage.getItem("userInfo")) {
+    showStamps();
+  } else {
+    document.getElementById("page-form").classList.remove("hidden");
+  }
+}
 
     function startTour() {
       const name = document.getElementById("name").value;
