@@ -159,7 +159,6 @@
   document.getElementById("page-start").classList.add("hidden");
   document.getElementById("page-form").classList.remove("hidden");
 }
-}
 
     function startTour() {
       const name = document.getElementById("name").value;
@@ -224,10 +223,10 @@ div.innerHTML = `<img src="${iconURL}" alt="도장 아이콘" style="width:40px;
             stampCount: collected.length
           })
         });
-      } else if (!code) {
-        alert("유효하지 않거나 이미 등록된 코드입니다.");
-      }
-    } else if (!code) {
+        } else if (!code) {
+    alert("유효하지 않거나 이미 등록된 코드입니다.");
+  }
+} else if (!code) {
         alert("유효하지 않거나 이미 등록된 코드입니다.");
       }
     }
