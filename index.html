@@ -90,10 +90,7 @@
       background: #ff5733;
     }
 
-    .logo {
-      max-width: 100px;
-      margin-bottom: 10px;
-    }
+    .logo { max-width: 90%; height: auto; margin-bottom: 16px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
     @media (min-width: 600px) {
       .stamp-book {
@@ -109,13 +106,13 @@
 </head>
 <body>
   <div id="page-start">
-    <img src="https://minju5686.github.io/dsg-qr/images/학교로고_투명.png" alt="학교 로고" class="logo" />
-    <h1 style="font-family: 'UhBee Seulvely', 'Arial', sans-serif; line-height: 1.5;">
+    <button onclick="showForm()">시작하기</button>
+<h1 style="font-family: 'UhBee Seulvely', 'Arial', sans-serif; line-height: 1.5;">
   <span style="display: block; color: green;">광주동성여자중학교</span>
   <span style="display: block; color: green;">QR 스탬프 투어</span>
 </h1>
     <p>7명의 선생님들의 캐릭터 스탬프를 모아보세요!</p>
-    <button onclick="showForm()">시작하기</button>
+    
   </div>
 
   <div id="page-form" class="hidden" style="font-family: 'UhBee Seulvely', 'Arial', sans-serif;">
@@ -170,6 +167,7 @@
       }
       localStorage.setItem("userInfo", JSON.stringify({ name, grade, classNum, number }));
       document.getElementById("page-form").classList.add("hidden");
+      document.getElementById("page-stamps").classList.remove("hidden");
       showStamps();
     }
 
@@ -190,7 +188,7 @@
 ];
 const iconURL = collected.includes(i) ? animalIcons[i][0] : animalIcons[i][1];
         const stampNames = ["1반 은진쌤", "2반 형인쌤", "3반 민주쌤", "4반 서현쌤", "5반 선호쌤", "6반 지호쌤", "7반 제섭쌤"];
-div.innerHTML = `<img src="${iconURL}" alt="도장 아이콘" style="width:40px; height:40px;"><br><span>${stampNames[i]}</span>`;
+div.innerHTML = `<div><img src="${iconURL}" alt="도장 아이콘" style="width:40px; height:40px;"><br><strong style='display:block; margin-top:4px;'>${stampNames[i]}</strong></div>`;
         book.appendChild(div);
       }
       document.getElementById("progress").innerText = `${collected.length}/${totalStamps} 도장 완료!`;
