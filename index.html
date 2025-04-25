@@ -107,27 +107,27 @@
   </style>
 </head>
 <body>
-  <div style="position: fixed; top: 10px; left: 15px; z-index: 999;">
-    <button onclick="navigateToPage('page-start')" style="background: #fff; color: #333; border: 1px solid #ccc; font-size: 0.9rem; padding: 6px 12px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer;">← 뒤로가기</button>
-  </div>
-  <div style="position: fixed; top: 10px; right: 15px; z-index: 999;">
+  <div style="position: fixed; top: 10px; left: 15px; right: 15px; display: flex; justify-content: space-between; align-items: center; z-index: 999;">
+  <button onclick="navigateToPage('page-start')" style="background: #fff; color: #333; border: 1px solid #ccc; font-size: 0.9rem; padding: 6px 12px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer;">← 뒤로가기</button>
   <details style="position: relative;">
     <summary style="background:#fff; color:#333; border: 1px solid #ccc; font-size: 0.9rem; padding: 6px 12px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer;">메뉴</summary>
     <div style="position: absolute; top: 40px; right: 0; width: 160px; background: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); text-align: center; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
-  <a href="#" onclick="navigateToPage('page-start')" style="text-decoration: none; color: #333; padding: 8px; border-radius: 5px; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='transparent'">메인 화면</a>
-  <a href="#" onclick="navigateToPage('page-stamps')" style="text-decoration: none; color: #333; padding: 8px; border-radius: 5px; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='transparent'">내 스탬프</a>
-  <a href="#" onclick="navigateToPage('schedule')" style="text-decoration: none; color: #333; padding: 8px; border-radius: 5px; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='transparent'">일정표</a>
-</div>
+      <a href="#" onclick="navigateToPage('page-start')" style="text-decoration: none; color: #333; padding: 8px; border-radius: 5px; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='transparent'">메인 화면</a>
+      <a href="#" onclick="navigateToPage('page-stamps')" style="text-decoration: none; color: #333; padding: 8px; border-radius: 5px; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='transparent'">내 스탬프</a>
+      <a href="#" onclick="navigateToPage('schedule')" style="text-decoration: none; color: #333; padding: 8px; border-radius: 5px; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='transparent'">일정표</a>
+    </div>
   </details>
+</div>
 </div>
   <div id="page-start">
     <img src="https://minju5686.github.io/dsg-qr/images/preview.png" alt="미리보기 이미지" class="logo" onerror="this.style.display='none'" />
     
     <p>7명의 선생님들의 캐릭터 스탬프를 모아보세요!</p>
-    <button onclick="showForm()">시작하기</button>
+    <button onclick="navigateToPage('page-form')">시작하기</button>
   </div>
 
   <div id="page-form" class="hidden" style="font-family: 'UhBee Seulvely', 'Arial', sans-serif;">
+  <img src="https://minju5686.github.io/dsg-qr/images/form_header.png" alt="인적사항 입력 헤더" class="logo" style="max-width: 250px; margin-bottom: 10px;" />
   <h2>인적사항 입력</h2>
   <div class="form-group">
     <input type="text" id="name" placeholder="이름" />
@@ -145,6 +145,7 @@
 </div>
 
   <div id="page-stamps" class="hidden">
+  <img src="https://minju5686.github.io/dsg-qr/images/stamps_header.png" alt="내 스탬프 헤더" class="logo" style="max-width: 250px; margin-bottom: 10px;" />
     <h2>내 스탬프</h2>
     <div class="stamp-book" id="stampBook"></div>
     <p id="progress"></p>
@@ -262,18 +263,21 @@ const container = document.createElement("div");
     }
 
     window.onload = () => {
-      const params = new URLSearchParams(window.location.search);
-      const qrCodeParam = params.get("code");
+  navigateToPage('page-start');
 
-      if (localStorage.getItem("userInfo")) {
-        showStamps();
-        if (qrCodeParam) {
-          submitQR(qrCodeParam);
-        }
-      }
+  const params = new URLSearchParams(window.location.search);
+  const qrCodeParam = params.get("code");
+
+  if (localStorage.getItem("userInfo")) {
+    if (qrCodeParam) {
+      submitQR(qrCodeParam);
+    }
+  }
+};
     };
   </script>
 <div id="schedule" class="hidden">
+  <img src="https://minju5686.github.io/dsg-qr/images/schedule_header.png" alt="일정표 헤더" class="logo" style="max-width: 250px; margin-bottom: 10px;" />
   <h2>일정표</h2>
   <p>여기에 QR 투어 일정이나 이벤트 내용을 추가하세요.</p>
 </div>
