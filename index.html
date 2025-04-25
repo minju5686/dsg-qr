@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
-
+
   <meta property="og:image" content="https://minju5686.github.io/dsg-qr/images/preview.png" />
   <meta property="og:title" content="광주동성여자중학교 QR 스탬프 투어" />
   <meta property="og:description" content="7명의 선생님 캐릭터 스탬프를 모아 리워드를 받아보세요!" />
@@ -57,15 +57,17 @@
     }
 
     .stamp {
-      border: 3px dotted #a2d5ac;
-      border-radius: 12px;
-      height: 100px;
-      line-height: 100px;
-      font-size: 17px;
-      background-color: #fdfdfd;
-      transition: all 0.3s ease;
-      box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
-    }
+  border: 3px solid #a2d5ac;
+  border-radius: 20px;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fdfdfd;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.05);
+}
 
     .stamp.filled {
       background-color: #b2f2bb;
@@ -105,23 +107,22 @@
   </style>
 </head>
 <body>
+  <div style="position: fixed; top: 10px; left: 15px; z-index: 999;">
+    <button onclick="navigateToPage('page-start')" style="background: #fff; color: #333; border: 1px solid #ccc; font-size: 0.9rem; padding: 6px 12px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer;">← 뒤로가기</button>
+  </div>
   <div style="position: fixed; top: 10px; right: 15px; z-index: 999;">
   <details style="position: relative;">
     <summary style="background:#fff; color:#333; border: 1px solid #ccc; font-size: 0.9rem; padding: 6px 12px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer;">메뉴</summary>
-    <div style="position: absolute; top: 35px; right: 0; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: left;">
-      <a href="#" onclick="navigateToPage('page-start')">메인 화면</a>
-      <a href="#" onclick="navigateToPage('page-stamps')">내 스탬프</a>
-      <a href="#" onclick="navigateToPage('schedule')">일정표</a>
-    </div>
+    <div style="position: absolute; top: 40px; right: 0; width: 160px; background: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.15); text-align: center; padding: 10px; display: flex; flex-direction: column; gap: 8px;">
+  <a href="#" onclick="navigateToPage('page-start')" style="text-decoration: none; color: #333; padding: 8px; border-radius: 5px; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='transparent'">메인 화면</a>
+  <a href="#" onclick="navigateToPage('page-stamps')" style="text-decoration: none; color: #333; padding: 8px; border-radius: 5px; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='transparent'">내 스탬프</a>
+  <a href="#" onclick="navigateToPage('schedule')" style="text-decoration: none; color: #333; padding: 8px; border-radius: 5px; transition: background-color 0.3s;" onmouseover="this.style.backgroundColor='#f0f0f0'" onmouseout="this.style.backgroundColor='transparent'">일정표</a>
+</div>
   </details>
 </div>
   <div id="page-start">
     <img src="https://minju5686.github.io/dsg-qr/images/preview.png" alt="미리보기 이미지" class="logo" onerror="this.style.display='none'" />
-    
-<h1 style="font-family: 'UhBee Seulvely', 'Arial', sans-serif; line-height: 1.5;">
-  <span style="display: block; color: green;">광주동성여자중학교</span>
-  <span style="display: block; color: green;">QR 스탬프 투어</span>
-</h1>
+    
     <p>7명의 선생님들의 캐릭터 스탬프를 모아보세요!</p>
     <button onclick="showForm()">시작하기</button>
   </div>
@@ -144,7 +145,7 @@
 </div>
 
   <div id="page-stamps" class="hidden">
-    <h2>도장북</h2>
+    <h2>내 스탬프</h2>
     <div class="stamp-book" id="stampBook"></div>
     <p id="progress"></p>
     <input type="text" id="qrInput" placeholder="QR 코드 입력" />
@@ -171,8 +172,7 @@
     let collected = JSON.parse(localStorage.getItem("stamps") || "[]");
 
     function showForm() {
-  document.getElementById("page-start").classList.add("hidden");
-  document.getElementById("page-form").classList.remove("hidden");
+  navigateToPage('page-form');
 }
 
     function startTour() {
@@ -191,9 +191,9 @@
     }
 
     function showStamps() {
-      const book = document.getElementById("stampBook");
-      book.innerHTML = "";
-      for (let i = 0; i < totalStamps; i++) {
+  const book = document.getElementById("stampBook");
+  book.innerHTML = "";
+  for (let i = 0; i < totalStamps; i++) {
         const div = document.createElement("div");
         div.className = "stamp" + (collected.includes(i) ? " filled" : "");
         const animalIcons = [
@@ -207,8 +207,25 @@
 ];
 const iconURL = collected.includes(i) ? animalIcons[i][0] : animalIcons[i][1];
         const stampNames = ["1반 은진쌤", "2반 형인쌤", "3반 민주쌤", "4반 서현쌤", "5반 선호쌤", "6반 지호쌤", "7반 제섭쌤"];
-div.innerHTML = `<div><img src="${iconURL}" alt="도장 아이콘" style="width:40px; height:40px;"><br><strong style='display:block; margin-top:4px;'>${stampNames[i]}</strong></div>`;
-        book.appendChild(div);
+const container = document.createElement("div");
+        container.style.display = "flex";
+        container.style.flexDirection = "column";
+        container.style.alignItems = "center";
+
+        const stampDiv = document.createElement("div");
+        stampDiv.className = "stamp" + (collected.includes(i) ? " filled" : "");
+        stampDiv.innerHTML = `<img src="${iconURL}" alt="도장 아이콘" style="width:40px; height:40px; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">`;
+
+        const nameDiv = document.createElement("div");
+        nameDiv.style.marginTop = "6px";
+        nameDiv.style.fontSize = "0.85rem";
+        nameDiv.style.color = "#666";
+        nameDiv.innerText = stampNames[i];
+
+        container.appendChild(stampDiv);
+        container.appendChild(nameDiv);
+
+        book.appendChild(container);
       }
       document.getElementById("progress").innerText = `${collected.length}/${totalStamps} 도장 완료!`;
       document.getElementById("page-stamps").classList.remove("hidden");
