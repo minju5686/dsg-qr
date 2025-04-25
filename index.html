@@ -105,14 +105,25 @@
   </style>
 </head>
 <body>
+  <div style="position: fixed; top: 10px; right: 15px; z-index: 999;">
+  <details style="position: relative;">
+    <summary style="background:#fff; color:#333; border: 1px solid #ccc; font-size: 0.9rem; padding: 6px 12px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer;">메뉴</summary>
+    <div style="position: absolute; top: 35px; right: 0; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: left;">
+      <a href="#" onclick="navigateToPage('page-start')">메인 화면</a>
+      <a href="#" onclick="navigateToPage('page-stamps')">내 스탬프</a>
+      <a href="#" onclick="navigateToPage('schedule')">일정표</a>
+    </div>
+  </details>
+</div>
   <div id="page-start">
-    <button onclick="showForm()">시작하기</button>
+    <img src="https://minju5686.github.io/dsg-qr/images/preview.png" alt="미리보기 이미지" class="logo" onerror="this.style.display='none'" />
+    
 <h1 style="font-family: 'UhBee Seulvely', 'Arial', sans-serif; line-height: 1.5;">
   <span style="display: block; color: green;">광주동성여자중학교</span>
   <span style="display: block; color: green;">QR 스탬프 투어</span>
 </h1>
     <p>7명의 선생님들의 캐릭터 스탬프를 모아보세요!</p>
-    
+    <button onclick="showForm()">시작하기</button>
   </div>
 
   <div id="page-form" class="hidden" style="font-family: 'UhBee Seulvely', 'Arial', sans-serif;">
@@ -147,6 +158,14 @@
   </div>
 
   <script>
+    function navigateToPage(pageId) {
+      const pages = ['page-start', 'page-form', 'page-stamps', 'page-complete', 'schedule'];
+      pages.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('hidden');
+      });
+      document.getElementById(pageId).classList.remove('hidden');
+    }
     const totalStamps = 7;
     const validCodes = ["spot1", "spot2", "spot3", "spot4", "spot5", "spot6", "spot7"];
     let collected = JSON.parse(localStorage.getItem("stamps") || "[]");
@@ -237,5 +256,9 @@ div.innerHTML = `<div><img src="${iconURL}" alt="도장 아이콘" style="width:
       }
     };
   </script>
+<div id="schedule" class="hidden">
+  <h2>일정표</h2>
+  <p>여기에 QR 투어 일정이나 이벤트 내용을 추가하세요.</p>
+</div>
 </body>
 </html>
