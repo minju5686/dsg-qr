@@ -106,7 +106,10 @@
 <body>
   <div id="page-start">
     <img src="https://minju5686.github.io/dsg-qr/images/학교로고_투명.png" alt="학교 로고" class="logo" />
-    <h1><span style="color: green;">광주동성여자중학교 QR 스탬프 투어</span></h1>
+    <h1 style="font-family: 'UhBee Seulvely', 'Arial', sans-serif; line-height: 1.5;">
+  <span style="display: block; color: green;">광주동성여자중학교</span>
+  <span style="display: block; color: green;">QR 스탬프 투어</span>
+</h1>
     <p>6개의 관광지를 방문하고 도장을 모아보세요!</p>
     <button onclick="showForm()">시작하기</button>
   </div>
@@ -127,16 +130,6 @@
   </div>
   <button onclick="startTour()">투어 시작</button>
 </div>
-    <div class="form-group">
-      <input type="number" id="grade" placeholder="학년" />
-    </div>
-    <div class="form-group">
-      <input type="number" id="classNum" placeholder="반" />
-    </div>
-    <div class="form-group">
-      <input type="number" id="number" placeholder="번호" />
-    </div>
-    <button onclick="startTour()">투어 시작</button>
   </div>
 
   <div id="page-stamps" class="hidden">
@@ -160,11 +153,8 @@
 
     function showForm() {
   document.getElementById("page-start").classList.add("hidden");
-  if (localStorage.getItem("userInfo")) {
-    showStamps();
-      fetch("https://script.google.com/macros/s/AKfycbxsIMX37os23bhAs4aD0NmTpM2ZRHkw91bDS2RC23dDryRXx1tEysXbeBXyi_-f2x0uow/exec", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+  document.getElementById("page-form").classList.remove("hidden");
+},
         body: JSON.stringify({ name, grade, classNum, number, stampCount: 0 })
       });
   } else {
