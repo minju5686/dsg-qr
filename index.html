@@ -104,7 +104,21 @@
         max-width: 300px;
       }
     }
-  </style>
+  @keyframes stampPop {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.9; }
+}
+
+.stamp img.stamp-complete {
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  width: 60px;
+  opacity: 0.9;
+  animation: stampPop 0.6s ease;
+}
+</style>
 </head>
 <body>
   <div style="position: fixed; top: 10px; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 15px; z-index: 999;">
@@ -191,28 +205,34 @@ function toggleMenu() {
     }
     const totalStamps = 7;
     const validCodes = ["spot1", "spot2", "spot3", "spot4", "spot5", "spot6", "spot7"];
-    let collected = JSON.parse(localStorage.getItem("stamps") || "[]");
+    // 초기화는 제거 (startTour에서 처리)
+let collected = [];
 
     function showForm() {
   navigateToPage('page-form');
 }
 
     function startTour() {
-      const name = document.getElementById("name").value;
-      const grade = document.getElementById("grade").value;
-      const classNum = document.getElementById("classNum").value;
-      const number = document.getElementById("number").value;
-      if (!name || !grade || !classNum || !number) {
-        alert("모든 항목을 입력해주세요.");
-        return;
-      }
-      localStorage.setItem("userInfo", JSON.stringify({ name, grade, classNum, number }));
+  const name = document.getElementById("name").value;
+  const grade = document.getElementById("grade").value;
+  const classNum = document.getElementById("classNum").value;
+  const number = document.getElementById("number").value;
+  if (!name || !grade || !classNum || !number) {
+    alert("모든 항목을 입력해주세요.");
+    return;
+  }
+  localStorage.setItem("userInfo", JSON.stringify({ name, grade, classNum, number }));
+  const stampKey = `stamps_${name}_${grade}_${classNum}_${number}`;
+  localStorage.setItem("stampKey", stampKey);
+  collected = JSON.parse(localStorage.getItem(stampKey) || "[]");
       document.getElementById("page-form").classList.add("hidden");
       document.getElementById("page-stamps").classList.remove("hidden");
       showStamps();
     }
 
     function showStamps() {
+  const stampKey = localStorage.getItem("stampKey");
+  collected = JSON.parse(localStorage.getItem(stampKey) || "[]");
   const book = document.getElementById("stampBook");
   book.innerHTML = "";
   for (let i = 0; i < totalStamps; i++) {
@@ -238,11 +258,11 @@ const container = document.createElement("div");
 stampDiv.className = "stamp" + (collected.includes(i) ? " filled" : "");
 if (collected.includes(i)) {
   stampDiv.innerHTML = `
-    <div style="position: relative;">
-      <img src="${iconURL}" alt="도장 아이콘" style="width:40px; height:40px; border-radius:50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-      <div style="position:absolute; top:0; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; font-size:0.7rem; font-weight:bold; color:#2f8f4e;">완료</div>
-    </div>
-  `;
+  <div style="position: relative;">
+    <img src="${iconURL}" alt="도장 아이콘" style="width:40px; height:40px; border-radius:50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <img src="./complete_stamp.png" alt="완료도장" class="stamp-complete">
+  </div>
+`;
 } else {
   stampDiv.innerHTML = `<img src="${iconURL}" alt="도장 아이콘" style="width:40px; height:40px; border-radius:50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">`;
 }
@@ -271,7 +291,8 @@ if (collected.includes(i)) {
       const index = validCodes.indexOf(inputCode);
       if (index !== -1 && !collected.includes(index)) {
         collected.push(index);
-        localStorage.setItem("stamps", JSON.stringify(collected));
+        const stampKey = localStorage.getItem("stampKey");
+localStorage.setItem(stampKey, JSON.stringify(collected));
         showStamps();
         document.getElementById("qrInput").value = "";
 
