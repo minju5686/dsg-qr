@@ -260,7 +260,7 @@ if (collected.includes(i)) {
   stampDiv.innerHTML = `
   <div style="position: relative;">
     <img src="${iconURL}" alt="도장 아이콘" style="width:40px; height:40px; border-radius:50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-    <img src="./complete_stamp.png" alt="완료도장" class="stamp-complete">
+    <img src="https://minju5686.github.io/dsg-qr/images/complete_stamp.png" alt="완료도장" class="stamp-complete">
   </div>
 `;
 } else {
@@ -314,15 +314,22 @@ localStorage.setItem(stampKey, JSON.stringify(collected));
     }
 
     window.onload = () => {
-  navigateToPage('page-start');
-
   const params = new URLSearchParams(window.location.search);
   const qrCodeParam = params.get("code");
 
-  if (localStorage.getItem("userInfo")) {
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  if (userInfo) {
+    const stampKey = `stamps_${userInfo.name}_${userInfo.grade}_${userInfo.classNum}_${userInfo.number}`;
+    localStorage.setItem("stampKey", stampKey);
+
     if (qrCodeParam) {
       submitQR(qrCodeParam);
+    } else {
+      showStamps();
+      navigateToPage('page-stamps');
     }
+  } else {
+    navigateToPage('page-start');
   }
 };
   </script>
