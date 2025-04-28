@@ -149,6 +149,28 @@ function toggleMenu() {
   const menu = document.getElementById('menu-content');
   menu.style.display = (menu.style.display === 'none' || menu.style.display === '') ? 'flex' : 'none';
 }
+function startCamera() {
+  document.getElementById("qr-reader").style.display = "block";
+  const html5QrCode = new Html5Qrcode("qr-reader");
+  html5QrCode.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: 200 },
+    (decodedText) => {
+      html5QrCode.stop();
+      document.getElementById("qr-reader").style.display = "none";
+      if (navigator.vibrate) {
+        navigator.vibrate(200); // 진동 피드백
+      }
+      alert("QR 인식 완료! 도장이 찍혔어요!"); // 팝업 알림
+      submitQR(decodedText);
+    },
+    (errorMessage) => {
+      // 인식 실패시 무시
+    }
+  ).catch(err => {
+    console.error("카메라 시작 실패", err);
+  });
+}
 </script>
   </details>
 </div>
@@ -247,7 +269,13 @@ let collected = [];
   ['https://cdn-icons-png.flaticon.com/128/616/616427.png', 'https://cdn-icons-png.flaticon.com/128/616/616427.png'], // 사자
   ['https://cdn-icons-png.flaticon.com/128/616/616417.png', 'https://cdn-icons-png.flaticon.com/128/616/616417.png']  // 고슴도치
 ];
-const iconURL = collected.includes(i) ? animalIcons[i][0] : animalIcons[i][1];
+const iconURL = (i === 0)
+  ? "https://minju5686.github.io/dsg-qr/images/1_stamp.png"
+  : (i === 2)
+  ? "https://minju5686.github.io/dsg-qr/images/3_stamp.png"
+  : (i === 6)
+  ? "https://minju5686.github.io/dsg-qr/images/7_stamp.png"
+  : animalIcons[i][collected.includes(i) ? 0 : 1];
         const stampNames = ["1반 은진쌤", "2반 형인쌤", "3반 민주쌤", "4반 서현쌤", "5반 선호쌤", "6반 지호쌤", "7반 제섭쌤"];
 const container = document.createElement("div");
         container.style.display = "flex";
@@ -256,15 +284,25 @@ const container = document.createElement("div");
 
         const stampDiv = document.createElement("div");
 stampDiv.className = "stamp" + (collected.includes(i) ? " filled" : "");
-if (collected.includes(i)) {
+if (i === 0) {
   stampDiv.innerHTML = `
-  <div style="position: relative;">
-    <img src="${iconURL}" alt="도장 아이콘" style="width:40px; height:40px; border-radius:50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-    <img src="https://minju5686.github.io/dsg-qr/images/complete_stamp.png" alt="완료도장" class="stamp-complete">
-  </div>
-`;
+    <div style="position: relative;">
+      <img src="${iconURL}" alt="은진쌤 스탬프" style="width:50px; height:50px; border-radius:12px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+      ${collected.includes(i) ? '<img src="https://minju5686.github.io/dsg-qr/images/complete_stamp.png" alt="완료도장" class="stamp-complete">' : ''}
+    </div>
+  `;
 } else {
-  stampDiv.innerHTML = `<img src="${iconURL}" alt="도장 아이콘" style="width:40px; height:40px; border-radius:50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">`;
+  if (collected.includes(i)) {
+    stampDiv.innerHTML = `
+      <div style="position: relative;">
+        <img src="${iconURL}" alt="완료된 아이콘" style="width:50px; height:50px; border-radius:12px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+        <img src="https://minju5686.github.io/dsg-qr/images/complete_stamp.png" alt="완료도장" class="stamp-complete">
+      </div>
+    `;
+  } else {
+    stampDiv.innerHTML = `<img src="${iconURL}" alt="아이콘" style="width:40px; height:40px; border-radius:50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">`;
+  }
+}" alt="도장 아이콘" style="width:40px; height:40px; border-radius:50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">`;
 }
 
         const nameDiv = document.createElement("div");
